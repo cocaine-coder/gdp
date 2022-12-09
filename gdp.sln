@@ -5,9 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3DA02D2F-492F-47F1-B9F8-6C88C447ED34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDP.Services", "src\GDP.Services\GDP.Services.csproj", "{200D88EE-B198-4C6E-AA9F-2C832BFBE023}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDP.Services", "src\GDP.Services\GDP.Services.csproj", "{200D88EE-B198-4C6E-AA9F-2C832BFBE023}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDP.WebApi", "src\GDP.WebApi\GDP.WebApi.csproj", "{577D1126-61F6-42FE-935F-F126D7284288}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GDP.Postgis", "src\GDP.Postgis\GDP.Postgis.csproj", "{80B357CC-6F48-4475-8AFB-D83CD6138BF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{577D1126-61F6-42FE-935F-F126D7284288}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{577D1126-61F6-42FE-935F-F126D7284288}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{577D1126-61F6-42FE-935F-F126D7284288}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B357CC-6F48-4475-8AFB-D83CD6138BF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B357CC-6F48-4475-8AFB-D83CD6138BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B357CC-6F48-4475-8AFB-D83CD6138BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B357CC-6F48-4475-8AFB-D83CD6138BF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{200D88EE-B198-4C6E-AA9F-2C832BFBE023} = {3DA02D2F-492F-47F1-B9F8-6C88C447ED34}
 		{577D1126-61F6-42FE-935F-F126D7284288} = {3DA02D2F-492F-47F1-B9F8-6C88C447ED34}
+		{80B357CC-6F48-4475-8AFB-D83CD6138BF0} = {3DA02D2F-492F-47F1-B9F8-6C88C447ED34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {80502EC1-0FE1-4FC4-AEBC-7D28453CC0C3}

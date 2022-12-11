@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Security.Principal;
-using System.Text;
-
-namespace GDP.Postgis.Model;
+﻿namespace GDP.Postgis.Model;
 
 public class Column
 {

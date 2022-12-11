@@ -16,6 +16,9 @@
     <PackageReference Include="NetTopologySuite.IO.GeoJSON4STJ" Version="3.0.0" />
     <PackageReference Include="NetTopologySuite.Swagger" Version="1.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="7.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Postgresql.Alternative" Version="3.5.0" />
     <PackageReference Include="WatchDog.NET" Version="1.3.3-rc" />
   </ItemGroup>
 

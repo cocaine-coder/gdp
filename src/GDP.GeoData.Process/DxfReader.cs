@@ -3,7 +3,7 @@ using MaxRev.Gdal.Core;
 using OSGeo.GDAL;
 using OSGeo.OSR;
 
-namespace GDP.Services;
+namespace GDP.GeoData.Process;
 
 public class DxfReader
 {

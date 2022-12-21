@@ -37,7 +37,7 @@ public static class IDbConnectionExtension
     /// 获取数据库中所有的表
     /// </summary>
     /// <param name="connection"></param>
-    /// <param name="schema"></param>
+    /// <param name="schema">模式名</param>
     /// <returns></returns>
     public static async Task<IEnumerable<Table>> QueryTablesAsync(this IDbConnection connection, string? schema = default, IDbTransaction? transaction = null)
         => await connection.QueryAsync<Table>(
@@ -49,7 +49,7 @@ public static class IDbConnectionExtension
     /// 获取数据库中所有带有空间数据列的table
     /// </summary>
     /// <param name="connection"></param>
-    /// <param name="schema"></param>
+    /// <param name="schema">模式名</param>
     /// <returns></returns>
     public static async Task<IEnumerable<Table>> QueryGeoTablesAsync(this IDbConnection connection, string? schema = default, IDbTransaction? transaction = null)
         => await connection.QueryAsync<Table>(
@@ -86,8 +86,8 @@ public static class IDbConnectionExtension
     /// 获取表结构
     /// </summary>
     /// <param name="connection"></param>
-    /// <param name="table">表名</param>
-    /// <param name="schema">模式名 默认public</param>
+    /// <param name="schema"></param>
+    /// <param name="table"></param>
     /// <returns></returns>
     public static async Task<IEnumerable<Column>> QueryColumnsAsync(this IDbConnection connection, string table, string schema = "public", IDbTransaction? transaction = null)
         => await connection.QueryAsync<Column>(

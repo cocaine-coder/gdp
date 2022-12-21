@@ -15,6 +15,15 @@ public static class IDbConnectionExtension
         => await connection.QueryAsync<Schemata>("select * from information_schema.schemata;");
 
     /// <summary>
+    /// 创建 schema
+    /// </summary>
+    /// <param name="connection"></param>
+    /// <param name="schema">schema名，内部自动小写化</param>
+    /// <returns></returns>
+    public static async Task CreateSchema(this IDbConnection connection, string schema)
+        => await connection.ExecuteAsync("create schema [if not exists] @schema", new { schema = schema.ToLower() });
+
+    /// <summary>
     /// 获取数据库中所有的表
     /// </summary>
     /// <param name="connection"></param>

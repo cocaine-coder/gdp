@@ -1,4 +1,4 @@
-﻿namespace GDP.WebApi.Endpoints;
+﻿namespace GDP.WebApi.Endpoints.V2;
 
 public class TestEndpoint : EndpointWithoutRequest
 {
@@ -6,6 +6,7 @@ public class TestEndpoint : EndpointWithoutRequest
     {
         Get("test");
         AllowAnonymous();
+        Version(2);
     }
 
     public override async Task HandleAsync(CancellationToken ct)

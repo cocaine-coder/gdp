@@ -1,22 +1,22 @@
 global using FastEndpoints;
-using FastEndpoints.Swagger;
+global using FastEndpoints.Swagger;
+
 using GDP.Persistence;
 using GDP.Services;
 using GDP.WebApi.Extensions;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.IO.Converters;
-using NetTopologySuite.Swagger;
 using NpgsqlTypes;
 using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using Serilog.Sinks.PostgreSQL;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 var defaultConnectionString = configuration.GetConnectionString("default")!;
-var tokenSigningKey = builder.Configuration.GetValue<string>("Security:TokenSigningKey")!;
+var tokenSigningKey = builder.Configuration.GetValue<string>("App:TokenSigningKey")!;
 var logTableName = builder.Configuration.GetValue<string>("App:LogTableName")!;
 
 #region create logger
@@ -56,7 +56,7 @@ builder.Services
     {
         o.SourceGeneratorDiscoveredTypes = DiscoveredTypes.All;
     })
-    .AddAuthenticationWithJWTBearer(tokenSigningKey, validateLifetime: false)
+    .AddAuthenticationWithJWTBearer(tokenSigningKey)
     .AddDbContext<GdpDbContext>(options =>
     {
         options.UseNpgsql(defaultConnectionString, npgsqlOptions => npgsqlOptions.UseNetTopologySuite());
@@ -65,16 +65,8 @@ builder.Services
             options.EnableSensitiveDataLogging();
     })
     .AddTransient<IDbConnection>(serviceProvider => serviceProvider.GetRequiredService<GdpDbContext>().Database.GetDbConnection())
-    .AddAppServices();
-
-builder.Services.AddSwaggerDoc(settings: s =>
-{
-    s.DocumentName = "veersion 1.0";
-    s.TypeMappers.AddGeometry(GeoSerializeType.Geojson);
-}, serializerSettings: s =>
-{
-    s.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-}, shortSchemaNames: true);
+    .AddAppServices()
+    .AddCustomSwaggerDoc();
 
 var app = builder.Build();
 
@@ -84,6 +76,8 @@ app.UseAuthorization();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";
+    config.Endpoints.ShortNames = true;
+    config.Versioning.PrependToRoute = true;
 
     config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     var jsonSerializerConverters = config.Serializer.Options.Converters;
@@ -93,7 +87,7 @@ app.UseFastEndpoints(config =>
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
-    app.Services.CreateFakeData();
+    //app.Services.CreateFakeData();
 }
 
 app.Run();

@@ -64,7 +64,14 @@ builder.Services
         if (builder.Environment.IsDevelopment())
             options.EnableSensitiveDataLogging();
     })
-    .AddTransient<IDbConnection>(serviceProvider => serviceProvider.GetRequiredService<GdpDbContext>().Database.GetDbConnection())
+    .AddTransient<IDbConnection>(serviceProvider =>
+    {
+        var connection = serviceProvider.GetRequiredService<GdpDbContext>().Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+
+        return connection;
+    })
     .AddAppServices()
     .AddCustomSwaggerDoc();
 

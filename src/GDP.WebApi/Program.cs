@@ -1,3 +1,6 @@
+global using System.Data;
+global using System.Text.Json;
+
 global using FastEndpoints;
 global using FastEndpoints.Swagger;
 
@@ -10,8 +13,6 @@ using NpgsqlTypes;
 using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 using Serilog.Sinks.PostgreSQL;
-using System.Text.Json;
-using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -73,9 +74,20 @@ builder.Services
         return connection;
     })
     .AddAppServices()
+    .AddCors(options =>
+    {
+        options.AddPolicy("all", policy =>
+        {
+            policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+    })
     .AddCustomSwaggerDoc();
 
 var app = builder.Build();
+
+app.UseCors("all");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -83,7 +95,6 @@ app.UseAuthorization();
 app.UseFastEndpoints(config =>
 {
     config.Endpoints.RoutePrefix = "api";
-    config.Endpoints.ShortNames = true;
     config.Versioning.PrependToRoute = true;
 
     config.Serializer.Options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;

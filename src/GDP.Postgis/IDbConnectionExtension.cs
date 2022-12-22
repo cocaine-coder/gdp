@@ -112,6 +112,22 @@ public static class IDbConnectionExtension
     /// <returns></returns>
     public static async Task<byte[]> QueryMvtBufferAsync(this IDbConnection connection, string schema, string table, string geomCol, string idCol, int z, int x, int y, string? columns = null, string? filter = null, IDbTransaction? transaction = null)
     {
+        var sql = $@"WITH mvt_geom as (
+              SELECT
+                ST_AsMVTGeom (
+                  ST_Transform({geomCol}, 3857),
+                  ST_TileEnvelope({z}, {x}, {y})
+                ) as geom,{idCol}{(columns != null ? $",{columns}" : "")}
+              FROM
+                {schema}.{table}
+              {(filter != null ? $"WHERE {filter}" : "")})
+            SELECT ST_AsMVT(mvt_geom.*, '{table}', 4096, 'geom') AS mvt from mvt_geom;";
+
+        return await connection.QuerySingleAsync<byte[]>(sql, transaction: transaction);
+    }
+
+    public static async Task<byte[]> QueryMvtBufferV2Async(this IDbConnection connection, string schema, string table, string geomCol, string idCol, int z, int x, int y, string? columns = null, string? filter = null, IDbTransaction? transaction = null)
+    {
         var sql = $@"
             WITH mvt_geom as (
               SELECT
@@ -119,13 +135,18 @@ public static class IDbConnectionExtension
                   ST_Transform({geomCol}, 3857),
                   ST_TileEnvelope({z}, {x}, {y})
                 ) as geom,
-                ${idCol},
+                {idCol}
                 {(columns != null ? $",{columns}" : "")}
               FROM
-                {schema}.{table}
-              {(filter != null ? $"WHERE {filter}" : "")}
+                {schema}.{table},
+                (SELECT ST_SRID({geomCol}) AS srid FROM {schema}.{table} LIMIT 1) a
+              WHERE
+                ST_Intersects(
+                  {geomCol},
+                  ST_Transform(ST_TileEnvelope({z}, {x}, {y}),srid)
+                ) {(filter != null ? $" AND {filter}" : "")}
             )
-            SELECT ST_AsMVT(mvt_geom.*, '{table}', 4096, 'geom',${idCol}) AS mvt from mvt_geom;";
+            SELECT ST_AsMVT(mvt_geom.*, '{table}', 4096, 'geom') AS mvt from mvt_geom;";
 
         return await connection.QuerySingleAsync<byte[]>(sql, transaction: transaction);
     }

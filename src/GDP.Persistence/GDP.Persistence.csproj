@@ -7,7 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SeedDatas\test.geojson" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SeedDatas\test.geojson" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON4STJ" Version="3.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GDP.Postgis\GDP.Postgis.csproj" />
   </ItemGroup>
 
 </Project>

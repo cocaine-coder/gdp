@@ -21,7 +21,7 @@ public static class IDbConnectionExtension
     /// <param name="schema">模式名，内部自动小写化</param>
     /// <returns></returns>
     public static async Task CreateSchemaAsync(this IDbConnection connection, string schema, IDbTransaction? transaction = null)
-        => await connection.ExecuteAsync("create schema if not exists @schema", new { schema = schema.ToLower() }, transaction: transaction);
+        => await connection.ExecuteAsync($"create schema if not exists {schema.ToLower()}", transaction: transaction);
 
     /// <summary>
     /// 判断schema是否存在
@@ -63,14 +63,17 @@ public static class IDbConnectionExtension
     /// 将所有的属性全部json化
     /// </summary>
     /// <param name="connection"></param>
+    /// <param name="schema">模式名</param>
     /// <param name="table">表名</param>
+    /// <param name="srid"></param>
     /// <returns></returns>
-    public static async Task CreateGeoTableAsync(this IDbConnection connection, string table, IDbTransaction? transaction = null)
+    public static async Task CreateGeoTableAsync(this IDbConnection connection, string schema, string table, int srid = 4326, IDbTransaction? transaction = null)
         => await connection.ExecuteAsync(
-            "create table @table (" +
+            $"create table {schema}.{table.ToLower()} (" +
                 "id serial primary key," +
                 "geom geometry not null," +
-                "properties jsonb not null default '{}'::jsonb)", new { table = table.ToLower() }, transaction: transaction);
+                "properties jsonb not null default '{}'::jsonb);" +
+            $"select updategeometrysrid('{schema}','{table.ToLower()}','geom',{srid})", transaction: transaction);
 
     /// <summary>
     /// 判断表是否存在
@@ -169,7 +172,7 @@ public static class IDbConnectionExtension
         var sql = $@"SELECT ST_AsGeobuf(q, 'geom')
                           FROM (SELECT
                                   ST_Transform({geomCol}, {srid}) as geom,
-                                  {idCol},
+                                  {idCol}
                                   {(columns != null ? $", {columns}" : "")}
                                 FROM
                                   {schema}.{table}

@@ -105,7 +105,7 @@ app.UseFastEndpoints(config =>
 if (app.Environment.IsDevelopment())
 {
     app.UseSwaggerGen();
-    //app.Services.CreateFakeData();
+    await app.Services.CreateFakeDataAsync();
 }
 
 app.Run();

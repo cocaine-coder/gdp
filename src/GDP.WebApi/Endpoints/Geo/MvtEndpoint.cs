@@ -10,13 +10,13 @@ public class MvtRequest
 
     public string GeomCol { get; set; }
 
+    public string IdCol { get; set; } = "id";
+
     public int Z { get; set; }
 
     public int X { get; set; }
 
     public int Y { get; set; }
-
-    public string IdCol { get; set; } = "id";
 
     public string? Columns { get; set; }
 
@@ -34,7 +34,7 @@ public class MvtEndpoint : Endpoint<MvtRequest>
     public override async Task HandleAsync(MvtRequest req, CancellationToken ct)
     {
         var conn = Resolve<IDbConnection>();
-        var buffer = await conn.QueryMvtBufferAsync(req.Schema, req.Table, req.GeomCol, req.IdCol, req.Z, req.X, req.Y, columns: req.Columns,req.Filter);
+        var buffer = await conn.QueryMvtBufferAsync(req.Schema, req.Table, req.GeomCol, req.IdCol, req.Z, req.X, req.Y, columns: req.Columns, req.Filter);
         await SendBytesAsync(buffer, contentType: "application/x-protobuf", cancellation: ct);
     }
 }

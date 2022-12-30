@@ -4,6 +4,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<ServerGarbageCollection>false</ServerGarbageCollection>
+	<!--- ServerGarbageCollection ： 服务器垃圾收集 ：不会让内存无限增长 -->
+	<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+	<!--- ServerGarbageCollection ： 并发垃圾收集 ：不会让内存无限增长 -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +27,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GDP.Services\GDP.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
